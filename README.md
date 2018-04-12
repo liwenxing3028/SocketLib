@@ -1,7 +1,12 @@
 # SocketLib
 这个socket连接方法
 ### OkSocket3.1  ###
-    compile 'com.github.liwenxing3028:SocketLib:3.1'
+    compile 'com.github.liwenxing3028:SocketLib:v3.1.1'
+    BaseApp类中添加
+            OkSocket.getInstance(mContext);
+            XLog.init(/*BuildConfig.DEBUG ? */LogLevel.ALL /*: LogLevel.NONE*/
+                    , new LogConfiguration.Builder().b().build());
+                    
     使用：
         OkSocket.<ExamBean>sendMsgBean(
                         okParams,//上传数据
