@@ -8,6 +8,7 @@ import com.dydl.electronicdemo.R;
 import com.dydl.electronicdemo.module.ExamBean;
 import com.dydl.socketlib.OkSocket;
 import com.dydl.socketlib.callback.OkCallBack;
+import com.dydl.socketlib.common.Constants;
 import com.dydl.socketlib.helper.OkParams;
 import com.dydl.socketlib.utils.DateFormatUtils;
 
@@ -18,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Constants.setServerIp("192.168.0.148");
 
         OkParams okParams = new OkParams();
         okParams.put("1", "ZN232")
@@ -43,6 +45,8 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
         );
+
+
 
         OkSocket.sendMsgString(
                 okParams,//上传数据

@@ -62,13 +62,9 @@ public class OkXmlHelper {
 
     public static Observable<OkStrBean> createIpObservable(String sendStr, int port) {
         return Observable.create(subscriber -> {
-            String url = null;
-            if (SharePUtils.isContains(Constants.SERVER_IP)) {
-                url = SharePUtils.getString(Constants.SERVER_IP);
-            }
             try {
                 Socket socket = new Socket();
-                socket.connect(new InetSocketAddress(url, port), 10000);
+                socket.connect(new InetSocketAddress(Constants.getServerIp(), port), 10000);
                 PrintWriter writer = new PrintWriter(new BufferedWriter(
                         new OutputStreamWriter(socket.getOutputStream(), "UTF-8")));
                 writer.print(sendStr);

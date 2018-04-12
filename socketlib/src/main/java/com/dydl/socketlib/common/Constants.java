@@ -9,11 +9,22 @@ import java.util.Map;
 public class Constants {
 
 
-    public static final String PATTERNCODER = "(?<!\\d)\\d{4}(?!\\d)";
-    public static final String SERVER_IP = "ip";
-    public static final String SERVER_PORT = "port";
-    public static final String NAME = "name";
-    public static final String PWD = "password";
+    private static String SERVER_IP = "127.0.0.1";
+    private static String SERVER_PORT = "8080";
 
+    public static String getServerIp() {
+        return SERVER_IP;
+    }
 
+    public static void setServerIp(String serverIp) {
+        SERVER_IP = serverIp;
+    }
+
+    public static String getServerPort() {
+        return SERVER_PORT;
+    }
+
+    public static void setServerPort(String serverPort) {
+        SERVER_PORT = serverPort;
+    }
 }

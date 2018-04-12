@@ -27,6 +27,8 @@ public class BaseApp extends Application {
         XLog.init(/*BuildConfig.DEBUG ? */LogLevel.ALL /*: LogLevel.NONE*/
                 , new LogConfiguration.Builder().b().build());
 
+
+
     }
 
     public static Context getContext() {

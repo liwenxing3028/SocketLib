@@ -26,8 +26,10 @@ public class OkSocket {
 
 
 
+
     protected OkSocket(Context context) {
         mContext = context.getApplicationContext(); //获取Application的Context
+
     }
 
     //OkSocket单例对象
