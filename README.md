@@ -23,6 +23,18 @@
                             }
                         }
                 );
+    使用：
+        OkSocket.sendMsgString(
+                        okParams,//上传数据
+                        6000,//端口号
+                        new OkCallBack<String>(this, "") {
+                            @Override
+                            public void onSuccess(String result) {
+                                super.onSuccess(result);
+                                Log.e("1212", result);
+                            }
+                        }
+                );
 
 ### OkSocket3.1错误集合更新 ### 
 
