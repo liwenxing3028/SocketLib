@@ -1,8 +1,23 @@
 # SocketLib
 这个socket连接方法
-### OkSocket3.2 --Bite 测试版 ###
-    1.利用反射处理 泛型T ，获取T对应的class
-    2.优化success成功处理方法
+### OkSocket3.1  ###
+    compile 'com.github.liwenxing3028:SocketLib:3.1'
+    使用：
+        OkSocket.<ExamBean>sendMsgBean(
+                        okParams,//上传数据
+                        6000,//端口号
+                        ExamBean.class,
+                        new OkCallBack<ExamBean>(this, "") {
+                            @Override
+                            public void onSuccess(ExamBean result) {
+                                super.onSuccess(result);
+                                Log.e("1212", result.get_$0() + "...." + result.get_$1() + "...." +
+                                        result.get_$2() + "...." +
+                                        result.get_$3().get(0).get_$0() + "...."
+                                );
+                            }
+                        }
+                );
 
 ### OkSocket3.1错误集合更新 ### 
 

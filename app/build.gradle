@@ -43,5 +43,6 @@ dependencies {
     compile project(path: ':socketlib')
     compile 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
-    //compile 'com.github.liwenxing3028:SocketLib:3.0'
+    //compile 'com.github.liwenxing3028:SocketLib:3.1'
+
 }
