@@ -1,6 +1,9 @@
 apply plugin: 'com.android.library'
 apply plugin: 'com.jakewharton.butterknife'
 apply plugin: 'me.tatarka.retrolambda'
+apply plugin: 'com.github.dcendents.android-maven'
+group='com.github.SocketLib'
+
 
 android {
     compileSdkVersion 26
