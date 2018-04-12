@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        style="@style/MatchMatch.Vertical"
+        android:gravity="center">
+
+      <!--  <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/x20"
+            android:src="@drawable/sel_no_car" />-->
+
+        <TextView
+            android:id="@+id/tv_title"
+            style="@style/WrapWrap"
+            android:textSize="25sp"
+            android:text="暂无意见" />
+    </LinearLayout>
+</RelativeLayout>

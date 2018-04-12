@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@color/gray3"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:orientation="vertical"
+        android:gravity="center"
+        >
+        <LinearLayout
+            android:gravity="center"
+            android:layout_width="match_parent"
+
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="客户编号:"
+                />
+            <EditText
+                android:id="@+id/customer_num"
+                style="@style/psd_change"
+                android:hint="请输入客户编号..."></EditText>
+        </LinearLayout>
+        <LinearLayout
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_marginTop="20dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="客户密码:"
+                />
+            <EditText
+                android:id="@+id/customer_pwd"
+                style="@style/psd_change"
+                android:hint="请输入客户密码..."></EditText>
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_query"
+            android:layout_marginTop="20dp"
+            android:layout_width="200dp"
+            android:layout_height="40dp"
+            android:background="@color/green1"
+            android:textColor="@color/white"
+            android:textSize="16dp"
+            android:text="查询"
+            />
+
+    </LinearLayout>
+
+</LinearLayout>
