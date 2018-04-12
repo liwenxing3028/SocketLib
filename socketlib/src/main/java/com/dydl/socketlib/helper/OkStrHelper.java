@@ -3,12 +3,14 @@ package com.dydl.socketlib.helper;
 import android.util.Log;
 import com.dydl.socketlib.callback.OkCallBack;
 import com.dydl.socketlib.callback.OkResponse;
+import com.dydl.socketlib.common.Constants;
 import com.dydl.socketlib.error.ApiException;
 import com.dydl.socketlib.error.CodeException;
 import com.dydl.socketlib.error.FactoryException;
 import com.dydl.socketlib.error.RetryWithDelay;
 import com.dydl.socketlib.error.SocketTimeException;
 import com.dydl.socketlib.model.OkStrBean;
+import com.dydl.socketlib.utils.SharePUtils;
 import com.dydl.socketlib.utils.StringUtil;
 import com.elvishew.xlog.XLog;
 import com.google.gson.Gson;
@@ -105,12 +107,12 @@ public class OkStrHelper {
     private static Observable<OkStrBean> createIpObservable(String sendStr, int port) {
         return Observable.create(subscriber -> {
             String url = null;
-            /*if (SharePUtils.isContains(Constants.SERVER_IP)) {
+            if (SharePUtils.isContains(Constants.SERVER_IP)) {
                 url = SharePUtils.getString(Constants.SERVER_IP);
-            }*/
+            }
             try {
                 Socket socket = new Socket();
-                socket.connect(new InetSocketAddress("192.168.0.148", port), 10000);
+                socket.connect(new InetSocketAddress(url, port), 10000);
                 PrintWriter writer = new PrintWriter(new BufferedWriter(
                         new OutputStreamWriter(socket.getOutputStream(), "UTF-8")));
                 writer.print(sendStr);

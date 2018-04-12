@@ -39,7 +39,9 @@ public class OkSocket {
     }
 
     // 发送请求字符码Bean
-    public static <T> void sendMsgBean(final OkParams bean, final int port, Class<? extends OkResponse> clazz,
+    public static  <T> void sendMsgBean(final OkParams bean,
+                                        final int port,
+                                        Class<? extends OkResponse> clazz,
                                     final OkCallBack listener) {
         OkStrHelper.<T>sendCreateData(bean, port, clazz, listener);
 
