@@ -19,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Constants.setServerIp("192.168.0.148");
+        Constants.setServerIp("192.168.0.136");
 
         OkParams okParams = new OkParams();
         okParams.put("1", "ZN232")

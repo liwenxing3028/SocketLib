@@ -1,6 +1,7 @@
 package com.dydl.socketlib.helper;
 
 import android.util.Log;
+
 import com.dydl.socketlib.callback.OkCallBack;
 import com.dydl.socketlib.callback.OkResponse;
 import com.dydl.socketlib.common.Constants;
@@ -10,10 +11,10 @@ import com.dydl.socketlib.error.FactoryException;
 import com.dydl.socketlib.error.RetryWithDelay;
 import com.dydl.socketlib.error.SocketTimeException;
 import com.dydl.socketlib.model.OkStrBean;
-import com.dydl.socketlib.utils.SharePUtils;
 import com.dydl.socketlib.utils.StringUtil;
 import com.elvishew.xlog.XLog;
 import com.google.gson.Gson;
+
 import java.io.BufferedWriter;
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -24,6 +25,7 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.util.concurrent.TimeUnit;
+
 import io.reactivex.Observable;
 import io.reactivex.ObservableTransformer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -38,16 +40,12 @@ import io.reactivex.schedulers.Schedulers;
 
 public class OkStrHelper {
 
-
-    protected static CompositeDisposable mCompositeDisposable = new CompositeDisposable();
-
-
     // 发送请求字符码
     public static <T> void sendCreateData(final OkParams bean, final int port, final Class<? extends OkResponse> clazz,
                                           final OkCallBack listener) {
         listener.onStart();
 
-        addDisposable(createSocket(bean, port)
+        createSocket(bean, port)
                 .subscribe(okBean -> {
                     XLog.d(okBean.getValue());
                     Gson gson = new Gson();
@@ -63,7 +61,7 @@ public class OkStrHelper {
                     } else {
                         listener.onError(new ApiException(throwable, CodeException.UNKNOWN_ERROR, throwable.getMessage()));
                     }
-                }));
+                });
     }
 
 
@@ -71,7 +69,7 @@ public class OkStrHelper {
     public static <T> void sendCreateDataString(final OkParams bean, final int port,
                                                 final OkCallBack listener) {
         listener.onStart();
-        addDisposable(createSocket(bean, port)
+        createSocket(bean, port)
                 .subscribe(okBean -> {
                     XLog.d(okBean.getValue());
                     listener.onSuccess(okBean.getValue());
@@ -85,7 +83,7 @@ public class OkStrHelper {
                     } else {
                         listener.onError(new ApiException(throwable, CodeException.UNKNOWN_ERROR, throwable.getMessage()));
                     }
-                }));
+                });
     }
 
 
@@ -95,8 +93,8 @@ public class OkStrHelper {
                 .flatMap(s -> createIpObservable(s, port))
                 .flatMap(okBean -> createResultData(okBean))
                 .flatMap(s -> createResultDataMsg(s))
-                .delaySubscription(500, TimeUnit.MILLISECONDS)
-                .retryWhen(new RetryWithDelay())
+                //.delaySubscription(500, TimeUnit.MILLISECONDS)
+                //.retryWhen(new RetryWithDelay())
                 .onErrorResumeNext(throwable -> {
                     return Observable.error(FactoryException.analysisExcetpion(throwable));
                 })
@@ -226,15 +224,11 @@ public class OkStrHelper {
                 .create(subscriber -> {
                     if (!StringUtil.isEmpty(okBean.getValue())) {
                         String result = okBean.getValue().substring(5, 9);
-                        if (result.equals("0000")) {
+                        if (result.equals("0000") || result.equals("1001")) {
                             subscriber.onNext(new OkStrBean()
                                     .setSocket(okBean.getSocket())
                                     .setValue(okBean.getValue()));
                             subscriber.onComplete();
-                        } else if (result.equals("1001")) {
-                            subscriber.onNext(new OkStrBean()
-                                    .setSocket(okBean.getSocket())
-                                    .setValue("1001"));//
                         } else {
                             subscriber.onError(new ApiException(new Throwable("未知错误")));
                         }
@@ -245,20 +239,20 @@ public class OkStrHelper {
                 });
     }
 
-    /**
+    /* *//**
      * 添加RxJava订阅
-     */
+     *//*
     protected static void addDisposable(Disposable disposable) {
 
         mCompositeDisposable.add(disposable);
     }
 
-    /**
+    *//**
      * 取消RxJava订阅
-     */
+     *//*
     public static void clearDisposable() {
         if (mCompositeDisposable != null) {
             mCompositeDisposable.clear();
         }
-    }
+    }*/
 }

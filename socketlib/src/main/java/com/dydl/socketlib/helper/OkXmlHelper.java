@@ -1,10 +1,16 @@
 package com.dydl.socketlib.helper;
 
+import com.dydl.socketlib.callback.OkCallBack;
 import com.dydl.socketlib.common.Constants;
+import com.dydl.socketlib.error.ApiException;
+import com.dydl.socketlib.error.CodeException;
+import com.dydl.socketlib.error.FactoryException;
+import com.dydl.socketlib.error.RetryWithDelay;
+import com.dydl.socketlib.error.SocketTimeException;
 import com.dydl.socketlib.model.OkStrBean;
 import com.dydl.socketlib.model.OkXmlBean;
-import com.dydl.socketlib.utils.SharePUtils;
 import com.dydl.socketlib.utils.StringUtil;
+import com.elvishew.xlog.XLog;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -15,6 +21,8 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.net.SocketTimeoutException;
+import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableTransformer;
@@ -28,11 +36,35 @@ import io.reactivex.schedulers.Schedulers;
 public class OkXmlHelper {
 
 
+    public static void sendCreateDataString(OkXmlBean bean, int port, OkCallBack listener) {
+
+        createSocketXml(bean, port)
+                .subscribe(okBean -> {
+                    XLog.d(okBean.getValue());
+                    listener.onSuccess(okBean.getValue());
+                }, throwable -> {
+                    XLog.d(throwable.getMessage());
+                    if (throwable instanceof ApiException) {
+                        listener.onError((ApiException) throwable);
+                    } else if (throwable instanceof SocketTimeoutException) {
+                        SocketTimeException exception = (SocketTimeException) throwable;
+                        listener.onError(new ApiException(exception, CodeException.RUNTIME_ERROR, exception.getMessage()));
+                    } else {
+                        listener.onError(new ApiException(throwable, CodeException.UNKNOWN_ERROR, throwable.getMessage()));
+                    }
+                });
+    }
+
     public static Observable<OkStrBean> createSocketXml(OkXmlBean bean, int port) {
         return Observable
                 .just(GetDataUp(bean))
                 .flatMap(s -> createIpObservable(s, port))
                 .flatMap(okBean -> createResultXml(okBean))
+                .delaySubscription(500, TimeUnit.MILLISECONDS)
+                .retryWhen(new RetryWithDelay())
+                .onErrorResumeNext(throwable -> {
+                    return Observable.error(FactoryException.analysisExcetpion(throwable));
+                })
                 .compose(applySchedulers());
     }
 
@@ -54,8 +86,7 @@ public class OkXmlHelper {
                                 .setValue(value));
                         subscriber.onComplete();
                     } catch (IOException e) {
-                        subscriber.onNext(new OkStrBean().setValue("001"));//"未知错误"
-                        subscriber.onComplete();
+                        subscriber.onError(e);//"未知错误"
                     }
                 });
     }
@@ -66,23 +97,20 @@ public class OkXmlHelper {
                 Socket socket = new Socket();
                 socket.connect(new InetSocketAddress(Constants.getServerIp(), port), 10000);
                 PrintWriter writer = new PrintWriter(new BufferedWriter(
-                        new OutputStreamWriter(socket.getOutputStream(), "UTF-8")));
+                        new OutputStreamWriter(socket.getOutputStream(), "GBK")));
                 writer.print(sendStr);
                 writer.flush();
                 subscriber.onNext(new OkStrBean().setSocket(socket)
                         .setValue(sendStr));
                 subscriber.onComplete();
             } catch (IOException e) {
-                e.printStackTrace();
-                subscriber.onNext(new OkStrBean()
-                        .setValue("003"));//"上传失败"
-                subscriber.onComplete();
+                subscriber.onError(e);//"上传失败"
             }
         });
     }
 
-    public static String GetDataUp(OkXmlBean bean) {
 
+    public static String GetDataUp(OkXmlBean bean) {
         String send = bean.toString();
         int strLength = StringUtil.getLengthContainsCn(send);
         String length = StringUtil.complementBit(Integer.toString(strLength), "0", 5, 1);
@@ -95,5 +123,6 @@ public class OkXmlHelper {
         return observable -> observable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
+
 
 }
